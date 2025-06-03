@@ -19,6 +19,8 @@ const EditBook = () => {
   const [book, setBook] = useState(null);
     const [previewUrl, setPreviewUrl] = useState("");
   const navigate = useNavigate();
+  const [titleError, setTitleError] = useState("");
+const [authorError, setAuthorError] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -31,6 +33,23 @@ const EditBook = () => {
   }, [book_id]);
 
   const handleUpdate = async () => {
+    let hasError = false;
+
+  if (!book.title) {
+    setTitleError("Title is required");
+    hasError = true;
+  } else {
+    setTitleError("");
+  }
+
+  if (!book.author) {
+    setAuthorError("Author is required");
+    hasError = true;
+  } else {
+    setAuthorError("");
+  }
+
+  if (hasError) return;
     const token = localStorage.getItem("token");
     try {
       await axios.put(`${API_BASE}/books/${book_id}`, book, {
@@ -83,18 +102,25 @@ const EditBook = () => {
     <Box padding="xl">
       <Container header={<Header variant="h2">Edit Book</Header>}>
         <SpaceBetween size="l">
-          <FormField label="Title" errorText={!book.title && "Title is required"}>
+          <FormField label="Title" >
             <Input
               value={book.title}
-              onChange={(e) => setBook({ ...book, title: e.detail.value })}
+               onChange={(e) => {
+      setBook({ ...book, title: e.detail.value });
+      setTitleError(""); 
+    }}
               required
             />
           </FormField>
 
-          <FormField label="Author" errorText={!book.title && "Author is required"}>
+          <FormField label="Author" >
             <Input
               value={book.author}
-              onChange={(e) => setBook({ ...book, author: e.detail.value })}
+              onChange={(e) =>{
+                 setBook({ ...book, author: e.detail.value });
+                       setAuthorError(""); 
+
+                }}
               required
             />
           </FormField>

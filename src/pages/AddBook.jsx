@@ -10,7 +10,7 @@ import {
   Button,
   Container,
   SpaceBetween,
-  Header, 
+  Header,
 } from "@cloudscape-design/components";
 
 const API_BASE = "https://hgh0wo65c1.execute-api.eu-west-1.amazonaws.com";
@@ -24,8 +24,11 @@ const parseJwt = (token) => {
 };
 
 const AddBook = () => {
-  const [alertMessage, setAlertMessage] = useState("");
-const [alertType, setAlertType] = useState("info");
+  const [titleError, setTitleError] = useState("");
+  const [authorError, setAuthorError] = useState("");
+
+  //   const [alertMessage, setAlertMessage] = useState("");
+  // const [alertType, setAlertType] = useState("info");
   const [book, setBook] = useState({
     title: "",
     author: "",
@@ -33,7 +36,7 @@ const [alertType, setAlertType] = useState("info");
     user_id: "",
     cover_image_url: ""
   });
-const navigate = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("token");
     const payload = parseJwt(token);
@@ -50,7 +53,7 @@ const navigate = useNavigate();
       const { data } = await axios.get(`${API_BASE}/upload-url`, {
         params: { ext },
         headers: { Authorization: `Bearer ${token}` },
-        
+
       });
 
       await axios.put(data.upload_url, file, {
@@ -59,31 +62,50 @@ const navigate = useNavigate();
 
       setBook((prev) => ({ ...prev, cover_image_url: data.file_url }));
       alert("Image uploaded!");
-       console.log("Uploaded file URL:", data.file_url);
+      console.log("Uploaded file URL:", data.file_url);
     } catch (err) {
       console.error("Upload failed", err);
       alert("Failed to upload image");
     }
-   
+
   };
 
-const handleFileSelect = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-  if (!allowedTypes.includes(file.type)) {
-    setAlertMessage(" Only JPG, JPEG, and PNG files are allowed.");
-    setAlertType("error");
-    return;
-  }
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (!allowedTypes.includes(file.type)) {
+      setAlertMessage(" Only JPG, JPEG, and PNG files are allowed.");
+      setAlertType("error");
+      return;
+    }
 
-  setAlertMessage(""); 
-  handleImageUpload(file);
-};
+    setAlertMessage("");
+    handleImageUpload(file);
+  };
 
 
   const handleSubmit = async () => {
+
+    let hasError = false;
+
+    if (!book.title) {
+      setTitleError("Title is required");
+      hasError = true;
+    } else {
+      setTitleError("");
+    }
+
+    if (!book.author) {
+      setAuthorError("Author is required");
+      hasError = true;
+    } else {
+      setAuthorError("");
+    }
+
+    if (hasError) return;
+
     const token = localStorage.getItem("token");
 
     try {
@@ -93,9 +115,9 @@ const handleFileSelect = (e) => {
           "Content-Type": "application/json"
         }
       });
-     navigate("/booklist", {
-  state: { alertMessage: "Book added successfully!", alertType: "success" }
-}); 
+      navigate("/booklist", {
+        state: { alertMessage: "Book added successfully!", alertType: "success" }
+      });
 
     } catch (err) {
       console.error("Add failed", err);
@@ -108,12 +130,15 @@ const handleFileSelect = (e) => {
   return (
     <Box padding="xl">
       <Container header={<Header variant="h2">Add New Book</Header>}>
-      
+
         <SpaceBetween size="l">
           <FormField label="Title" errorText={!book.title && "Title is required"}>
             <Input
               value={book.title}
-              onChange={(e) => setBook({ ...book, title: e.detail.value })}
+              onChange={(e) => {
+                setBook({ ...book, title: e.detail.value });
+                setTitleError("");
+              }}
               required
             />
           </FormField>
@@ -121,7 +146,10 @@ const handleFileSelect = (e) => {
           <FormField label="Author" errorText={!book.title && "Author is required"}>
             <Input
               value={book.author}
-              onChange={(e) => setBook({ ...book, author: e.detail.value })}
+              onChange={(e) => {
+                setBook({ ...book, title: e.detail.value });
+                setTitleError("");
+              }}
               required
             />
           </FormField>
