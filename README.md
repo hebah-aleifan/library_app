@@ -1,74 +1,70 @@
+# Getting Started with Create React App
 
-📚HebaLibrary
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-🔗 [Live Demo on AWS Amplify](https://main.d1llsbuu5xubt1.amplifyapp.com/)
+## Available Scripts
 
-A full-stack serverless web application to manage a books.  
+In the project directory, you can run:
 
-  ✨ Features
+### `npm start`
 
-- 📥 Add new books with:
-  - Title
-  - Author
-  - Description
-  - Cover image (uploaded to S3)
-- ✏️ Edit existing book details
-- 🗑️ Delete books
-- 👤 User authentication (Sign up / Login) using **Amazon Cognito**
-- 🔒 Secured API calls using JWT tokens
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-## 🧰 Services Used and Their Advantages
+### `npm test`
 
-✅ AWS Amplify:
-Hosts the React frontend and enables continuous deployment directly from GitHub.
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-✅ Amazon S3:
-Stores static media files such as book cover images.
+### `npm run build`
 
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-✅ Amazon API Gateway:
-Exposes secure RESTful APIs and routes HTTP requests to backend Lambda functions.
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-✅ AWS Lambda:
-Runs the backend logic using FastAPI in a fully serverless and scalable environment.
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-✅ Amazon DynamoDB:
-NoSQL serverless database used for storing book data (title, author, description...).
+### `npm run eject`
 
-✅ Amazon Cognito:
-Provides user sign-up, login, authentication, and token-based authorization with OpenID Connect (OIDC) to authenticate users. Upon login, users receive a JWT token (access_token, id_token), which is stored client-side and sent with each request. The backend (FastAPI running in AWS Lambda) verifies the token using Cognito's JWKS endpoint and authorizes or denies access accordingly.
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-✅ GitHub:
-Used for version control, source code management, and CI/CD integration with Amplify.
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## ⚙️ Installation (For Local Development)
-```bash
-# Frontend
-cd frontend
-npm install
-npm start
+## Learn More
 
-# Backend
-cd backend
-uvicorn main:app --reload
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-[ React + Cloudscape UI ]
-     |
-     V
-[ Cognito Login Page (Hosted UI) ]
-     |
-     V
-[ API Gateway ]
-     |
-     V
-[ Lambda (FastAPI using Mangum) ]
-     |          |
-     |          |-- verify_token.py
-     |          |-- s3_utils.py
-     |
-     V
-[ DynamoDB (Books Table) ]      [ S3 (book images) ]
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
