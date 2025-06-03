@@ -67,6 +67,7 @@ const { alertMessage, alertType } = location.state || {};
    
     <Box padding="l">
       <SpaceBetween size="l">
+
         <Header
           variant="h1"
           actions={
@@ -75,6 +76,15 @@ const { alertMessage, alertType } = location.state || {};
             </Link>
           }
         >
+          <Button
+  onClick={() => {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  }}
+>
+  Logout
+</Button>
+
           Your Book List
         </Header>
 {alertMessage && (
