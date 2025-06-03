@@ -39,8 +39,10 @@ const EditBook = () => {
           "Content-Type": "application/json",
         },
       });
-      alert("Book updated!");
-      navigate("/booklist");
+   
+       navigate("/booklist", {
+  state: { alertMessage: "Book updated successfully!", alertType: "success" }
+}); 
     } catch (err) {
       console.error(err);
       alert("Update failed");
