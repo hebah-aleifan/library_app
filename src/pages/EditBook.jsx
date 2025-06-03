@@ -83,17 +83,19 @@ const EditBook = () => {
     <Box padding="xl">
       <Container header={<Header variant="h2">Edit Book</Header>}>
         <SpaceBetween size="l">
-          <FormField label="Title">
+          <FormField label="Title" errorText={!book.title && "Title is required"}>
             <Input
               value={book.title}
               onChange={(e) => setBook({ ...book, title: e.detail.value })}
+              required
             />
           </FormField>
 
-          <FormField label="Author">
+          <FormField label="Author" errorText={!book.title && "Author is required"}>
             <Input
               value={book.author}
               onChange={(e) => setBook({ ...book, author: e.detail.value })}
+              required
             />
           </FormField>
 <FormField label="Cover Image">

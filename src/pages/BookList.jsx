@@ -50,6 +50,17 @@ const { alertMessage, alertType } = location.state || {};
       });
   }, [navigate]);
 
+  useEffect(() => {
+  if (alertMessage) {
+    const timer = setTimeout(() => {
+      navigate(location.pathname, { replace: true }); 
+    }, 15000);
+
+    return () => clearTimeout(timer);
+  }
+}, [alertMessage, navigate, location.pathname]);
+
+
   const handleDelete = async (bookId) => {
     const token = localStorage.getItem("token");
     try {
@@ -70,25 +81,28 @@ const { alertMessage, alertType } = location.state || {};
 
         <Header
           variant="h1"
-          actions={
-            <Link to="/add-book">
-              <Button variant="primary">+ Add New Book</Button>
-            </Link>
-          }
+  actions={
+    <SpaceBetween size="xs" direction="horizontal">
+      <Link to="/add-book">
+        <Button variant="primary">+ Add New Book</Button>
+      </Link>
+      <Button
+        onClick={() => {
+          localStorage.removeItem("token");
+          window.location.href = "/";
+        }}
+      >
+        Logout
+      </Button>
+    </SpaceBetween>
+  }
         >
-          <Button
-  onClick={() => {
-    localStorage.removeItem("token");
-    window.location.href = "/";
-  }}
->
-  Logout
-</Button>
+         
 
           Your Book List
         </Header>
 {alertMessage && (
-  <Alert type={alertType || "info"} statusIconAriaLabel={alertType}>
+  <Alert type={alertType || "success"} statusIconAriaLabel={alertType}>
     {alertMessage}
   </Alert>
 )}
