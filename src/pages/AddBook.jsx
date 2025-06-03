@@ -27,8 +27,8 @@ const AddBook = () => {
   const [titleError, setTitleError] = useState("");
   const [authorError, setAuthorError] = useState("");
 
-  //   const [alertMessage, setAlertMessage] = useState("");
-  // const [alertType, setAlertType] = useState("info");
+    const [alertMessage, setAlertMessage] = useState("");
+   const [alertType, setAlertType] = useState("info");
   const [book, setBook] = useState({
     title: "",
     author: "",
