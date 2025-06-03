@@ -11,7 +11,7 @@ import {
 const LoginButton = () => {
   const clientId = "ca7762l5p5hjql0f6oj42mt4d";
   const domain = "hebalibrary.auth.eu-west-1.amazoncognito.com"; 
-  const redirectUri = "http://localhost:3000/booklist";
+  const redirectUri = "https://main.d1llsbuu5xubt1.amplifyapp.com/booklist";
 
   const handleLogin = () => {
     const loginUrl = `https://${domain}/login?client_id=${clientId}&response_type=token&scope=email+openid+profile&redirect_uri=${redirectUri}`;
