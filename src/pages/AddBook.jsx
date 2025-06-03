@@ -61,7 +61,8 @@ const AddBook = () => {
       });
 
       setBook((prev) => ({ ...prev, cover_image_url: data.file_url }));
-      alert("Image uploaded!");
+setAlertMessage("Image uploaded successfully.");
+setAlertType("success");
       console.log("Uploaded file URL:", data.file_url);
     } catch (err) {
       console.error("Upload failed", err);
@@ -129,6 +130,21 @@ const AddBook = () => {
 
   return (
     <Box padding="xl">
+      {alertMessage && (
+  <Box margin={{ bottom: "s" }}>
+    <div
+      style={{
+        padding: "12px",
+        backgroundColor: alertType === "success" ? "#d1e7dd" : "#f8d7da",
+        color: alertType === "success" ? "#0f5132" : "#842029",
+        borderRadius: "6px"
+      }}
+    >
+      {alertMessage}
+    </div>
+  </Box>
+)}
+
       <Container header={<Header variant="h2">Add New Book</Header>}>
 
         <SpaceBetween size="l">

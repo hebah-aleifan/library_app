@@ -11,16 +11,18 @@ import {
   Header,
   SpaceBetween
 } from "@cloudscape-design/components";
-    const API_BASE ="https://hgh0wo65c1.execute-api.eu-west-1.amazonaws.com";
+const API_BASE = "https://hgh0wo65c1.execute-api.eu-west-1.amazonaws.com";
 
 const EditBook = () => {
 
   const { book_id } = useParams();
   const [book, setBook] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState("");
+  const [previewUrl, setPreviewUrl] = useState("");
   const navigate = useNavigate();
   const [titleError, setTitleError] = useState("");
-const [authorError, setAuthorError] = useState("");
+  const [authorError, setAuthorError] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("info");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -35,23 +37,23 @@ const [authorError, setAuthorError] = useState("");
   const handleUpdate = async () => {
     let hasError = false;
 
-  if (!book.title) {
-    setTitleError("Title is required");
-    hasError = true;
-  } else {
-    setTitleError("");
-  }
+    if (!book.title) {
+      setTitleError("Title is required");
+      hasError = true;
+    } else {
+      setTitleError("");
+    }
 
-  if (!book.author) {
-    setAuthorError("Author is required");
-    hasError = true;
-  } else {
-    setAuthorError("");
-  }
+    if (!book.author) {
+      setAuthorError("Author is required");
+      hasError = true;
+    } else {
+      setAuthorError("");
+    }
 
-  if (hasError) return;
+    if (hasError) return;
 
-   
+
     const token = localStorage.getItem("token");
     try {
       await axios.put(`${API_BASE}/books/${book_id}`, book, {
@@ -60,64 +62,80 @@ const [authorError, setAuthorError] = useState("");
           "Content-Type": "application/json",
         },
       });
-   
-       navigate("/booklist", {
-  state: { alertMessage: "Book updated successfully!", alertType: "success" }
-}); 
+
+      navigate("/booklist", {
+        state: { alertMessage: "Book updated successfully!", alertType: "success" }
+      });
     } catch (err) {
       console.error(err);
-      alert("Update failed");
+      setAlertMessage("Failed to update the book. Please try again.");
+      setAlertType("error");
     }
   };
- const handleImageUpload = async (e) => {
-  
-const file = e.target.files[0];
-if (!file) return;
+  const handleImageUpload = async (e) => {
 
-const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-if (!allowedTypes.includes(file.type)) {
-  alert("Only JPG, JPEG, and PNG files are allowed.");
-  return;
-}
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const token = localStorage.getItem("token");
-  const ext = file.name.split('.').pop().toLowerCase();
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (!allowedTypes.includes(file.type)) {
+      setAlertMessage("Only JPG, JPEG, and PNG files are allowed.");
+      setAlertType("error");
+      return;
+    }
 
-  try {
-    const { data } = await axios.get(`${API_BASE}/upload-url`, {
-      params: { ext },
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const token = localStorage.getItem("token");
+    const ext = file.name.split('.').pop().toLowerCase();
 
-    const { upload_url, file_url } = data;
+    try {
+      const { data } = await axios.get(`${API_BASE}/upload-url`, {
+        params: { ext },
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    await axios.put(upload_url, file, {
-      headers: { "Content-Type": file.type },
-    });
+      const { upload_url, file_url } = data;
 
-    setBook({ ...book, cover_image_url: file_url });
-    setPreviewUrl(file_url);
-  } catch (err) {
-    console.error("Image upload failed:", err);
-    alert("Failed to upload image");
-  }
-};
+      await axios.put(upload_url, file, {
+        headers: { "Content-Type": file.type },
+      });
+
+      setBook({ ...book, cover_image_url: file_url });
+      setPreviewUrl(file_url);
+    } catch (err) {
+      console.error("Image upload failed:", err);
+      alert("Failed to upload image");
+    }
+  };
 
 
 
   if (!book) return <p>Loading book...</p>;
 
-   return (
+  return (
     <Box padding="xl">
+      {alertMessage && (
+        <Box margin={{ bottom: "s" }}>
+          <div
+            style={{
+              padding: "12px",
+              backgroundColor: alertType === "success" ? "#d1e7dd" : "#f8d7da",
+              color: alertType === "success" ? "#0f5132" : "#842029",
+              borderRadius: "6px"
+            }}
+          >
+            {alertMessage}
+          </div>
+        </Box>
+      )}
       <Container header={<Header variant="h2">Edit Book</Header>}>
         <SpaceBetween size="l">
           <FormField label="Title" errorText={titleError} >
             <Input
               value={book.title}
-               onChange={(e) => {
-      setBook({ ...book, title: e.detail.value });
-      setTitleError(""); 
-    }}
+              onChange={(e) => {
+                setBook({ ...book, title: e.detail.value });
+                setTitleError("");
+              }}
               required
             />
           </FormField>
@@ -125,30 +143,30 @@ if (!allowedTypes.includes(file.type)) {
           <FormField label="Author" errorText={authorError}>
             <Input
               value={book.author}
-              onChange={(e) =>{
-                 setBook({ ...book, author: e.detail.value });
-                       setAuthorError(""); 
+              onChange={(e) => {
+                setBook({ ...book, author: e.detail.value });
+                setAuthorError("");
 
-                }}
+              }}
               required
             />
           </FormField>
-<FormField label="Cover Image">
-  {previewUrl || book.cover_image_url ? (
-    <img
-      src={previewUrl || book.cover_image_url}
-      alt="Cover Preview"
-      style={{ width: "150px", marginBottom: "1rem", borderRadius: "8px" }}
-    />
-  ) : (
-    <Box>No image</Box>
-  )}
-<input
-    type="file"
-    accept="image/*"
-    onChange={handleImageUpload}
-  />
-</FormField>
+          <FormField label="Cover Image">
+            {previewUrl || book.cover_image_url ? (
+              <img
+                src={previewUrl || book.cover_image_url}
+                alt="Cover Preview"
+                style={{ width: "150px", marginBottom: "1rem", borderRadius: "8px" }}
+              />
+            ) : (
+              <Box>No image</Box>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+            />
+          </FormField>
 
           <FormField label="Description">
             <Textarea
