@@ -50,6 +50,14 @@ const [authorError, setAuthorError] = useState("");
   }
 
   if (hasError) return;
+  
+   if (!file) return;
+
+  const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+  if (!allowedTypes.includes(file.type)) {
+    alert("Only JPG, JPEG, and PNG files are allowed.");
+    return;
+  }
     const token = localStorage.getItem("token");
     try {
       await axios.put(`${API_BASE}/books/${book_id}`, book, {
@@ -102,7 +110,7 @@ const [authorError, setAuthorError] = useState("");
     <Box padding="xl">
       <Container header={<Header variant="h2">Edit Book</Header>}>
         <SpaceBetween size="l">
-          <FormField label="Title" >
+          <FormField label="Title" errorText={titleError} >
             <Input
               value={book.title}
                onChange={(e) => {
@@ -113,7 +121,7 @@ const [authorError, setAuthorError] = useState("");
             />
           </FormField>
 
-          <FormField label="Author" >
+          <FormField label="Author" errorText={authorError}>
             <Input
               value={book.author}
               onChange={(e) =>{

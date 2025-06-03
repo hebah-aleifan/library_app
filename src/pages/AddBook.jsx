@@ -132,7 +132,7 @@ const AddBook = () => {
       <Container header={<Header variant="h2">Add New Book</Header>}>
 
         <SpaceBetween size="l">
-          <FormField label="Title" errorText={!book.title && "Title is required"}>
+          <FormField label="Title" errorText={titleError}>
             <Input
               value={book.title}
               onChange={(e) => {
@@ -143,12 +143,12 @@ const AddBook = () => {
             />
           </FormField>
 
-          <FormField label="Author" errorText={!book.title && "Author is required"}>
+          <FormField label="Author" errorText={authorError}>
             <Input
               value={book.author}
               onChange={(e) => {
-                setBook({ ...book, title: e.detail.value });
-                setTitleError("");
+                setBook({ ...book, author: e.detail.value });
+                setAuthorError("");
               }}
               required
             />
