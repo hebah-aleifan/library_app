@@ -1,4 +1,5 @@
-📚HebaLibrary
+
+📚   HebaLibrary
 
 🔗 [Live Demo on AWS Amplify](https://main.d1llsbuu5xubt1.amplifyapp.com/)
 
@@ -25,8 +26,6 @@ Hosts the React frontend and enables continuous deployment directly from GitHub.
 ✅ Amazon S3:
 Stores static media files such as book cover images.
 
-✅ Amazon CloudFront (Optional):
-Delivers S3 content quickly and globally through a CDN (Content Delivery Network).
 
 ✅ Amazon API Gateway:
 Exposes secure RESTful APIs and routes HTTP requests to backend Lambda functions.
@@ -38,7 +37,7 @@ Runs the backend logic using FastAPI in a fully serverless and scalable environm
 NoSQL serverless database used for storing book data (title, author, description...).
 
 ✅ Amazon Cognito:
-Provides user sign-up, login, authentication, and token-based authorization.
+Provides user sign-up, login, authentication, and token-based authorization with OpenID Connect (OIDC) to authenticate users. Upon login, users receive a JWT token (access_token, id_token), which is stored client-side and sent with each request. The backend (FastAPI running in AWS Lambda) verifies the token using Cognito's JWKS endpoint and authorizes or denies access accordingly.
 
 ✅ GitHub:
 Used for version control, source code management, and CI/CD integration with Amplify.
@@ -55,3 +54,21 @@ npm start
 # Backend
 cd backend
 uvicorn main:app --reload
+
+
+[ React + Cloudscape UI ]
+     |
+     V
+[ Cognito Login Page (Hosted UI) ]
+     |
+     V
+[ API Gateway ]
+     |
+     V
+[ Lambda (FastAPI using Mangum) ]
+     |          |
+     |          |-- verify_token.py
+     |          |-- s3_utils.py
+     |
+     V
+[ DynamoDB (Books Table) ]      [ S3 (book images) ]
