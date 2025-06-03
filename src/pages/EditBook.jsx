@@ -50,14 +50,8 @@ const [authorError, setAuthorError] = useState("");
   }
 
   if (hasError) return;
-  
-   if (!file) return;
 
-  const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-  if (!allowedTypes.includes(file.type)) {
-    alert("Only JPG, JPEG, and PNG files are allowed.");
-    return;
-  }
+   
     const token = localStorage.getItem("token");
     try {
       await axios.put(`${API_BASE}/books/${book_id}`, book, {
@@ -76,8 +70,15 @@ const [authorError, setAuthorError] = useState("");
     }
   };
  const handleImageUpload = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+  
+const file = e.target.files[0];
+if (!file) return;
+
+const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+if (!allowedTypes.includes(file.type)) {
+  alert("Only JPG, JPEG, and PNG files are allowed.");
+  return;
+}
 
   const token = localStorage.getItem("token");
   const ext = file.name.split('.').pop().toLowerCase();
