@@ -11,6 +11,7 @@ import {
   Container,
   SpaceBetween,
   Header,
+  Alert
 } from "@cloudscape-design/components";
 
 const API_BASE = "https://hgh0wo65c1.execute-api.eu-west-1.amazonaws.com";
