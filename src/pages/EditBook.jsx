@@ -115,7 +115,7 @@ const EditBook = () => {
     <Box padding="xl">
       {alertMessage && (
         <Box margin={{ bottom: "s" }}>
-          <div
+          <Alert
             style={{
               padding: "12px",
               backgroundColor: alertType === "success" ? "#d1e7dd" : "#f8d7da",
@@ -124,7 +124,7 @@ const EditBook = () => {
             }}
           >
             {alertMessage}
-          </div>
+          </Alert>
         </Box>
       )}
       <Container header={<Header variant="h2">Edit Book</Header>}>

@@ -1,70 +1,132 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 📚   HebaLibrary
 
-## Available Scripts
+## 🔗 [Live Demo ](https://main.d1llsbuu5xubt1.amplifyapp.com/)
 
-In the project directory, you can run:
+A full-stack serverless web application to manage a books.  
 
-### `npm start`
+ ##  ✨ Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- 📥 Add new books with:
+  - Title
+  - Author
+  - Description
+  - Cover image (uploaded to S3)
+- ✏️ Edit existing book details
+- 🗑️ Delete books
+- 👤 User authentication (Sign up / Login) using **Amazon Cognito**
+- 🔒 Secured API calls using JWT tokens
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+## 🧰 Services Used and Their Advantages
+## 1. AWS Amplify
+🔧 Used for:
+Hosting the React frontend.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Enabling CI/CD with GitHub.
 
-### `npm run build`
+⭐ Benefits:
+Easy deployment with GitHub integration.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Free SSL and custom domain support.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Global content delivery via built-in CloudFront.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Fully managed, no need to configure servers.
 
-### `npm run eject`
+## 2. Amazon S3
+🔧 Used for:
+Storing book cover images uploaded by users.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+⭐ Benefits:
+Durable and scalable object storage.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Supports large file uploads and various formats.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Presigned URLs allow secure uploads without exposing credentials.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Can serve images via CloudFront for fast loading.
 
-## Learn More
+## 3. Amazon API Gateway
+🔧 Used for:
+Creating secure HTTP endpoints for the frontend to interact with Lambda functions (backend).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+⭐ Benefits:
+Instant RESTful APIs for Lambda functions.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Built-in support for CORS, throttling, authorization.
 
-### Code Splitting
+Pay-as-you-go model (no charge if unused).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Works well with JWT and Cognito authentication.
 
-### Analyzing the Bundle Size
+## 4. AWS Lambda
+🔧 Used for:
+Running FastAPI backend functions for CRUD operations and image upload URL generation.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+⭐ Benefits:
+Serverless execution – no need to manage or scale servers.
 
-### Making a Progressive Web App
+Automatic scaling on demand.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Low cost especially for low/medium traffic apps.
 
-### Advanced Configuration
+Integrates directly with S3, DynamoDB, and API Gateway.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 5. Amazon DynamoDB
+🔧 Used for:
+Storing book records (title, author, description, user ID, image URL, etc.)
 
-### Deployment
+⭐ Benefits:
+NoSQL database with fast reads/writes.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Serverless and highly scalable.
 
-### `npm run build` fails to minify
+Pay only for what you use.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Ideal for key-value or document-based storage.
+
+## 6. Amazon Cognito
+🔧 Used for:
+Handling user authentication (signup, login).
+
+Issuing JWT tokens for secure API access.
+
+⭐ Benefits:
+No need to build login system manually.
+
+JWT-based authentication integrated with API Gateway and Lambda.
+
+Supports email/password or social logins (Google, Facebook, etc.).
+
+Seamlessly integrates with Amplify.
+
+## ⚙️ Installation (For Local Development)
+```bash
+# Frontend
+cd frontend
+npm install
+npm start
+
+# Backend
+cd backend
+uvicorn main:app --reload
+
+
+[ React + Cloudscape UI ]
+     |
+     V
+[ Cognito Login Page (Hosted UI) ]
+     |
+     V
+[ API Gateway ]
+     |
+     V
+[ Lambda (FastAPI using Mangum) ]
+     |          |
+     |          |-- Auth.py
+     |          |-- s3_utils.py
+     |
+     V
+[ DynamoDB (Books Table) ]      [ S3 (book images) ]
+
