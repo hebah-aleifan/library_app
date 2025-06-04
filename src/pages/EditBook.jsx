@@ -24,6 +24,7 @@ const EditBook = () => {
   const [authorError, setAuthorError] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("info");
+  const [imageValid, setImageValid] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -36,6 +37,11 @@ const EditBook = () => {
   }, [book_id]);
 
   const handleUpdate = async () => {
+    if (!imageValid) {
+      setAlertMessage("Invalid image file. Please upload a valid image before saving.");
+      setAlertType("error");
+      return;
+    }
     let hasError = false;
 
     if (!book.title) {
@@ -82,8 +88,10 @@ const EditBook = () => {
     if (!allowedTypes.includes(file.type)) {
       setAlertMessage("Only JPG, JPEG, and PNG files are allowed.");
       setAlertType("error");
+      setImageValid(false);
       return;
     }
+    setImageValid(true);
 
     const token = localStorage.getItem("token");
     const ext = file.name.split('.').pop().toLowerCase();
@@ -104,7 +112,11 @@ const EditBook = () => {
       setPreviewUrl(file_url);
     } catch (err) {
       console.error("Image upload failed:", err);
-      alert("Failed to upload image");
+      setAlertMessage("Failed to upload image");
+      setAlertType("error");
+
+      setImageValid(false);
+
     }
   };
 
@@ -116,14 +128,7 @@ const EditBook = () => {
     <Box padding="xl">
       {alertMessage && (
         <Box margin={{ bottom: "s" }}>
-          <Alert
-            style={{
-              padding: "12px",
-              backgroundColor: alertType === "success" ? "#d1e7dd" : "#f8d7da",
-              color: alertType === "success" ? "#0f5132" : "#842029",
-              borderRadius: "6px"
-            }}
-          >
+          <Alert statusIconAriaLabel={alertType} type={alertType}>
             {alertMessage}
           </Alert>
         </Box>

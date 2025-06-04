@@ -27,9 +27,9 @@ const parseJwt = (token) => {
 const AddBook = () => {
   const [titleError, setTitleError] = useState("");
   const [authorError, setAuthorError] = useState("");
-
-    const [alertMessage, setAlertMessage] = useState("");
-   const [alertType, setAlertType] = useState("info");
+  const [imageValid, setImageValid] = useState(true);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("info");
   const [book, setBook] = useState({
     title: "",
     author: "",
@@ -62,12 +62,15 @@ const AddBook = () => {
       });
 
       setBook((prev) => ({ ...prev, cover_image_url: data.file_url }));
-setAlertMessage("Image uploaded successfully.");
-setAlertType("success");
+      setAlertMessage("Image uploaded successfully.");
+      setAlertType("success");
       console.log("Uploaded file URL:", data.file_url);
     } catch (err) {
       console.error("Upload failed", err);
-      alert("Failed to upload image");
+      setAlertMessage("Failed to upload image");
+      setAlertType("error");
+
+      setImageValid(false);
     }
 
   };
@@ -80,15 +83,23 @@ setAlertType("success");
     if (!allowedTypes.includes(file.type)) {
       setAlertMessage(" Only JPG, JPEG, and PNG files are allowed.");
       setAlertType("error");
+      setImageValid(false);
+
       return;
     }
-
+    setImageValid(true);
     setAlertMessage("");
     handleImageUpload(file);
   };
 
 
   const handleSubmit = async () => {
+    if (!imageValid) {
+      setAlertMessage("Please upload a valid image file (JPG, JPEG, PNG).");
+      setAlertType("error");
+      return;
+    }
+
 
     let hasError = false;
 
@@ -132,19 +143,19 @@ setAlertType("success");
   return (
     <Box padding="xl">
       {alertMessage && (
-  <Box margin={{ bottom: "s" }}>
-    <Alert
-      style={{
-        padding: "12px",
-        backgroundColor: alertType === "success" ? "#d1e7dd" : "#f8d7da",
-        color: alertType === "success" ? "#0f5132" : "#842029",
-        borderRadius: "6px"
-      }}
-    >
-      {alertMessage}
-    </Alert>
-  </Box>
-)}
+        <Box margin={{ bottom: "s" }}>
+          <Alert
+            style={{
+              padding: "12px",
+              backgroundColor: alertType === "success" ? "#d1e7dd" : "#f8d7da",
+              color: alertType === "success" ? "#0f5132" : "#842029",
+              borderRadius: "6px"
+            }}
+          >
+            {alertMessage}
+          </Alert>
+        </Box>
+      )}
 
       <Container header={<Header variant="h2">Add New Book</Header>}>
 
