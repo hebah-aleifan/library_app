@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import axios from "axios";
 import {
   Box,
@@ -41,6 +40,7 @@ const AddBook = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const payload = parseJwt(token);
+    console.log("JWT PAYLOAD:", payload);
     const userEmail = payload?.email || "anonymous";
     setBook((prev) => ({ ...prev, user_id: userEmail }));
   }, []);
