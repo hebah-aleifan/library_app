@@ -124,7 +124,7 @@ uvicorn main:app --reload
      V
 [ Lambda (FastAPI using Mangum) ]
      |          |
-     |          |-- verify_token.py
+     |          |-- Auth.py
      |          |-- s3_utils.py
      |
      V
