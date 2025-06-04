@@ -1,7 +1,7 @@
 
 # 📚   HebaLibrary
 
-## 🔗 [Live Demo on AWS Amplify](https://main.d1llsbuu5xubt1.amplifyapp.com/)
+## 🔗 [Live Demo ](https://main.d1llsbuu5xubt1.amplifyapp.com/)
 
 A full-stack serverless web application to manage a books.  
 
