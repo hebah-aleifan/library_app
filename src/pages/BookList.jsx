@@ -24,7 +24,7 @@ const { alertMessage, alertType } = location.state || {};
     // Extract token from URL hash if it exists
     const hash = window.location.hash.substring(1);
     const params = new URLSearchParams(hash);
-    const accessToken = params.get("access_token");
+    const accessToken = params.get("id_token");
 
     if (accessToken) {
       localStorage.setItem("token", accessToken);
