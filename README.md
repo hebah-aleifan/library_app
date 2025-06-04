@@ -1,5 +1,5 @@
 
-## 📚   HebaLibrary
+# 📚   HebaLibrary
 
 ## 🔗 [Live Demo on AWS Amplify](https://main.d1llsbuu5xubt1.amplifyapp.com/)
 
@@ -19,7 +19,7 @@ A full-stack serverless web application to manage a books.
 
 
 ## 🧰 Services Used and Their Advantages
-# 1. AWS Amplify
+## 1. AWS Amplify
 🔧 Used for:
 Hosting the React frontend.
 
@@ -34,7 +34,7 @@ Global content delivery via built-in CloudFront.
 
 Fully managed, no need to configure servers.
 
- 2. Amazon S3
+## 2. Amazon S3
 🔧 Used for:
 Storing book cover images uploaded by users.
 
@@ -47,7 +47,7 @@ Presigned URLs allow secure uploads without exposing credentials.
 
 Can serve images via CloudFront for fast loading.
 
- 3. Amazon API Gateway
+## 3. Amazon API Gateway
 🔧 Used for:
 Creating secure HTTP endpoints for the frontend to interact with Lambda functions (backend).
 
@@ -60,7 +60,7 @@ Pay-as-you-go model (no charge if unused).
 
 Works well with JWT and Cognito authentication.
 
-4. AWS Lambda
+## 4. AWS Lambda
 🔧 Used for:
 Running FastAPI backend functions for CRUD operations and image upload URL generation.
 
@@ -73,7 +73,7 @@ Low cost especially for low/medium traffic apps.
 
 Integrates directly with S3, DynamoDB, and API Gateway.
 
- 5. Amazon DynamoDB
+## 5. Amazon DynamoDB
 🔧 Used for:
 Storing book records (title, author, description, user ID, image URL, etc.)
 
@@ -86,7 +86,7 @@ Pay only for what you use.
 
 Ideal for key-value or document-based storage.
 
- 6. Amazon Cognito
+## 6. Amazon Cognito
 🔧 Used for:
 Handling user authentication (signup, login).
 
