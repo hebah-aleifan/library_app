@@ -19,7 +19,7 @@ A full-stack serverless web application to manage a books.
 
 
 ## 🧰 Services Used and Their Advantages
-1. AWS Amplify
+# 1. AWS Amplify
 🔧 Used for:
 Hosting the React frontend.
 
