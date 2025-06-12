@@ -17,6 +17,9 @@ const LoginButton = () => {
   const handleLogin = () => {
     const loginUrl = `https://${domain}/login?client_id=${clientId}&response_type=token&scope=email+openid+profile&redirect_uri=${redirectUri}`;
     window.location.href = loginUrl;
+    console.log("Redirect URI:", redirectUri);
+console.log("Login URL:", loginUrl);
+
   };
   return (
     <Box padding="xxl">
