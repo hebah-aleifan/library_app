@@ -13,7 +13,7 @@ import {
   Alert
 } from "@cloudscape-design/components";
 
-const API_BASE = "https://hgh0wo65c1.execute-api.eu-west-1.amazonaws.com";
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
 
 const parseJwt = (token) => {
   try {
@@ -28,7 +28,8 @@ const AddBook = () => {
   const [authorError, setAuthorError] = useState("");
   const [imageValid, setImageValid] = useState(true);
   const [alertMessage, setAlertMessage] = useState("");
-  const [alertType, setAlertType] = useState("info");
+  const [alertType, setAlertType] = useState("error");
+  const [previewUrl, setPreviewUrl] = useState("");
   const [book, setBook] = useState({
     title: "",
     author: "",
@@ -47,10 +48,13 @@ const AddBook = () => {
 
   const handleImageUpload = async (file) => {
     const token = localStorage.getItem("token");
+
+
     if (!file) return;
 
     try {
       const ext = file.name.split(".").pop();
+
       const { data } = await axios.get(`${API_BASE}/upload-url`, {
         params: { ext },
         headers: { Authorization: `Bearer ${token}` },
@@ -61,12 +65,18 @@ const AddBook = () => {
         headers: { "Content-Type": file.type }
       });
 
-      setBook((prev) => ({ ...prev, cover_image_url: data.file_url }));
+      setBook((prev) => ({ ...prev, cover_image_url: data.file_key }));
+      const res = await axios.get(`${API_BASE}/image-url`, {
+        params: { key: data.file_key },
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setPreviewUrl(res.data.url);
+
       setAlertMessage("Image uploaded successfully.");
       setAlertType("success");
-      console.log("Uploaded file URL:", data.file_url);
+      console.log("Uploaded file URL:", data.file_key);
     } catch (err) {
-      console.error("Upload failed", err);
+  console.error("Upload failed", err.response?.data || err.message || err);
       setAlertMessage("Failed to upload image");
       setAlertType("error");
 
@@ -147,7 +157,7 @@ const AddBook = () => {
           <Alert
             style={{
               padding: "12px",
-              backgroundColor: alertType === "success" ? "#d1e7dd" : "#f8d7da",
+              backgroundColor: alertType === "success" ? "#d1e7dd" : "",
               color: alertType === "success" ? "#0f5132" : "#842029",
               borderRadius: "6px"
             }}
@@ -191,9 +201,9 @@ const AddBook = () => {
 
           <FormField label="Cover Image">
             <input type="file" accept="image/*" onChange={handleFileSelect} />
-            {book.cover_image_url && (
+            {previewUrl && (
               <img
-                src={book.cover_image_url}
+                src={previewUrl}
                 alt="Cover"
                 style={{ width: "100px", marginTop: "1rem", borderRadius: "6px" }}
               />

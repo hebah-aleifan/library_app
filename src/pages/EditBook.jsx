@@ -12,7 +12,10 @@ import {
   Alert,
   SpaceBetween
 } from "@cloudscape-design/components";
-const API_BASE = "https://hgh0wo65c1.execute-api.eu-west-1.amazonaws.com";
+
+
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
+
 
 const EditBook = () => {
 
@@ -23,18 +26,36 @@ const EditBook = () => {
   const [titleError, setTitleError] = useState("");
   const [authorError, setAuthorError] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
-  const [alertType, setAlertType] = useState("info");
+  const [alertType, setAlertType] = useState("error");
   const [imageValid, setImageValid] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    axios.get(`${API_BASE}/books`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then((res) => {
-      const target = res.data.find((b) => b.book_id === book_id);
-      setBook(target);
-    });
+
+    const fetchBook = async () => {
+      try {
+        const res = await axios.get(`${API_BASE}/books/${book_id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        const target = res.data;
+        setBook(target);
+
+        if (target?.cover_image_url) {
+          const imageRes = await axios.get(`${API_BASE}/image-url`, {
+            params: { key: target.cover_image_url },
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setPreviewUrl(imageRes.data.url);
+        }
+      } catch (err) {
+        console.error("Error loading book or image:", err);
+      }
+    };
+
+    fetchBook();
   }, [book_id]);
+
 
   const handleUpdate = async () => {
     if (!imageValid) {
@@ -62,7 +83,9 @@ const EditBook = () => {
 
 
     const token = localStorage.getItem("token");
+
     try {
+
       await axios.put(`${API_BASE}/books/${book_id}`, book, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -85,6 +108,7 @@ const EditBook = () => {
     if (!file) return;
 
     const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+
     if (!allowedTypes.includes(file.type)) {
       setAlertMessage("Only JPG, JPEG, and PNG files are allowed.");
       setAlertType("error");
@@ -102,14 +126,18 @@ const EditBook = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const { upload_url, file_url } = data;
+      const { upload_url, file_key } = data;
 
       await axios.put(upload_url, file, {
         headers: { "Content-Type": file.type },
       });
 
-      setBook({ ...book, cover_image_url: file_url });
-      setPreviewUrl(file_url);
+      setBook({ ...book, cover_image_url: file_key });
+      const imgRes = await axios.get(`${API_BASE}/image-url`, {
+        params: { key: file_key },
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setPreviewUrl(imgRes.data.url);
     } catch (err) {
       console.error("Image upload failed:", err);
       setAlertMessage("Failed to upload image");
@@ -122,7 +150,9 @@ const EditBook = () => {
 
 
 
-  if (!book) return <p>Loading book...</p>;
+  if (!book) return ( <div style={{ textAlign: "center", marginTop: "2rem", fontSize: "18px" }}>
+      Loading book..
+    </div>);
 
   return (
     <Box padding="xl">

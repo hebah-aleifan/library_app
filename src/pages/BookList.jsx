@@ -13,7 +13,7 @@ import {
 } from "@cloudscape-design/components";
 
 
-const API_BASE = "https://hgh0wo65c1.execute-api.eu-west-1.amazonaws.com";
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
 
 const BookList = () => {
   const [books, setBooks] = useState([]);
@@ -21,7 +21,6 @@ const BookList = () => {
 const location = useLocation();
 const { alertMessage, alertType } = location.state || {};
   useEffect(() => {
-    // Extract token from URL hash if it exists
     const hash = window.location.hash.substring(1);
     const params = new URLSearchParams(hash);
     const accessToken = params.get("id_token");
@@ -38,7 +37,7 @@ const { alertMessage, alertType } = location.state || {};
       navigate("/");
       return;
     }
-
+    debugger;
     axios
       .get(`${API_BASE}/books`, {
         headers: { Authorization: `Bearer ${token}` },
