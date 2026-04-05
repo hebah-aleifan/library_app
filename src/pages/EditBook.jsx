@@ -82,7 +82,7 @@ const EditBook = () => {
     if (hasError) return;
 
 
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
 
     try {
 
@@ -163,7 +163,7 @@ const EditBook = () => {
           </Alert>
         </Box>
       )}
-      <Container header={<Header variant="h2">Edit Book</Header>}>
+      <Container header={<Header variant="h2">Edit Book:</Header>}>
         <SpaceBetween size="l">
           <FormField label="Title" errorText={titleError} >
             <Input
@@ -205,6 +205,7 @@ const EditBook = () => {
           </FormField>
 
           <FormField label="Description">
+            
             <Textarea
               value={book.description}
               onChange={(e) => setBook({ ...book, description: e.detail.value })}
